@@ -9,15 +9,7 @@ const initializeGoogleAI = (): GoogleGenAI => {
     throw new Error("API_KEY 未配置。无法初始化 Gemini API。");
   }
   if (!ai) {
-    const config: any = { apiKey: process.env.API_KEY };
-    
-    // 如果设置了代理地址，则使用代理
-    if (process.env.GEMINI_BASE_URL) {
-      config.baseURL = process.env.GEMINI_BASE_URL;
-      console.log("使用代理地址:", process.env.GEMINI_BASE_URL);
-    }
-    
-    ai = new GoogleGenAI(config);
+    ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   }
   return ai;
 };
