@@ -36,7 +36,7 @@ const SenderIcon: React.FC<SenderIconProps> = ({ sender, purpose, messageText })
 
 const getSenderNameStyle = (sender: MessageSender): string => {
   switch (sender) {
-    case MessageSender.User: return "text-blue-600";
+    case MessageSender.User: return "text-blue-800";
     case MessageSender.Cognito: return "text-green-600";
     case MessageSender.Muse: return "text-purple-600";
     case MessageSender.System: return "text-gray-600";
@@ -104,7 +104,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onManualRetry, f
   ) && messageText.startsWith("(AI") && messageText.endsWith(")");
 
   const shouldRenderMarkdown = 
-    (sender === MessageSender.User || sender === MessageSender.Cognito || sender === MessageSender.Muse) &&
+    (sender === MessageSender.Cognito || sender === MessageSender.Muse) &&
     !isPlaceholderAiMessage &&
     purpose !== MessagePurpose.SystemNotification; 
 
@@ -179,7 +179,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onManualRetry, f
               {(isDiscussionStep || isFinalResponse) && ( 
                 <span className={`font-medium ${bubblePurposePrefixColorClass}`}>{getPurposePrefix(purpose, sender)}</span>
               )}
-              {messageText}
+        
             </p>
           )
         )}
