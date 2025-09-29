@@ -31,74 +31,68 @@
             position: relative; /* 用于初始动画 */
         }
 
-        /* ------------------- 背景星云 (更不规则的流动) ------------------- */
-        .nebula-bg {
+        /* ------------------- Neural Network Background (Inspira UI Style) ------------------- */
+        .neural-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                /* 第一层：大范围柔和渐变 */
-                radial-gradient(circle at 120% 120%, var(--glow-primary) 0%, transparent 50%),
-                radial-gradient(circle at -20% -20%, var(--glow-secondary) 0%, transparent 50%),
-                /* 第二层：更小的、动态的云朵 */
-                radial-gradient(ellipse at 50% 10%, rgba(255, 255, 255, 0.05) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 90%, rgba(255, 255, 255, 0.05) 0%, transparent 60%),
-                radial-gradient(ellipse at 20% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
-            background-size: 
-                250% 250%, /* 第一层更大的尺寸 */
-                250% 250%,
-                150% 150%, /* 第二层中等尺寸 */
-                170% 170%,
-                130% 130%;
-            background-repeat: no-repeat;
-            filter: blur(80px); /* 更强的模糊 */
-            animation: moveNebula 35s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate, /* 更长的动画时间，更柔和的缓动 */
-                       pulseNebulaColor 15s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate; /* 颜色脉冲动画 */
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0a0a0a 100%);
+            z-index: -2;
+        }
+
+        .neural-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: -1;
-            transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), /* 更长的过渡，更丝滑的缓动 */
-                        filter 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
-                        opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-            opacity: 0; /* 初始隐藏，用于页面加载动画 */
-            transform: scale(1.05); /* 初始略微放大 */
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
         }
 
-        /* 背景流动动画 */
-        @keyframes moveNebula {
-            0% { background-position: 0% 0%, 100% 100%, 0% 0%, 100% 0%, 50% 50%; }
-            100% { background-position: 100% 100%, 0% 0%, 100% 100%, 0% 100%, 50% 0%; }
+        .neural-canvas.active {
+            opacity: 1;
         }
 
-        /* 背景颜色脉冲动画 */
-        @keyframes pulseNebulaColor {
-            0% { 
-                filter: blur(80px); 
-                background-image: 
-                    radial-gradient(circle at 120% 120%, var(--glow-primary), transparent 50%),
-                    radial-gradient(circle at -20% -20%, var(--glow-secondary), transparent 50%),
-                    radial-gradient(ellipse at 50% 10%, rgba(255, 255, 255, 0.05), transparent 60%),
-                    radial-gradient(ellipse at 70% 90%, rgba(255, 255, 255, 0.05), transparent 60%),
-                    radial-gradient(ellipse at 20% 40%, rgba(255, 255, 255, 0.05), transparent 60%);
-            }
-            50% { 
-                filter: blur(100px); /* 脉冲时更模糊 */
-                background-image: 
-                    radial-gradient(circle at 120% 120%, var(--glow-primary), transparent 60%),
-                    radial-gradient(circle at -20% -20%, var(--glow-secondary), transparent 60%),
-                    radial-gradient(ellipse at 50% 10%, rgba(255, 255, 255, 0.08), transparent 50%),
-                    radial-gradient(ellipse at 70% 90%, rgba(255, 255, 255, 0.08), transparent 50%),
-                    radial-gradient(ellipse at 20% 40%, rgba(255, 255, 255, 0.08), transparent 50%);
-            }
-            100% { 
-                filter: blur(80px); 
-                background-image: 
-                    radial-gradient(circle at 120% 120%, var(--glow-primary), transparent 50%),
-                    radial-gradient(circle at -20% -20%, var(--glow-secondary), transparent 50%),
-                    radial-gradient(ellipse at 50% 10%, rgba(255, 255, 255, 0.05), transparent 60%),
-                    radial-gradient(ellipse at 70% 90%, rgba(255, 255, 255, 0.05), transparent 60%),
-                    radial-gradient(ellipse at 20% 40%, rgba(255, 255, 255, 0.05), transparent 60%);
-            }
+        /* 神经网络粒子动画样式 */
+        .neural-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* 连接线样式 */
+        .neural-connection {
+            position: absolute;
+            pointer-events: none;
+            background: linear-gradient(90deg, transparent, var(--glow-secondary), var(--glow-primary), transparent);
+            height: 1px;
+            animation: pulseConnection 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseConnection {
+            0%, 100% { opacity: 0.3; transform: scaleX(1); }
+            50% { opacity: 0.8; transform: scaleX(1.05); }
+        }
+
+        /* 流动光效 */
+        .neural-flow {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--glow-secondary), transparent);
+            pointer-events: none;
+            animation: flowEnergy 2s linear infinite;
+        }
+
+        @keyframes flowEnergy {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1) rotate(180deg); opacity: 1; }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; }
         }
 
 
@@ -113,19 +107,42 @@
             height: 520px; /* 定义高度，防止翻转时挤压 */
         }
 
-        /* 卡片进入动画 */
+        /* 卡片进入动画 - 增强版 */
         @keyframes cardEntrance {
             0% {
                 opacity: 0;
                 transform: translateZ(-500px) rotateX(25deg) scale(0.7);
+                filter: blur(20px) brightness(0.5);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateZ(100px) rotateX(-8deg) scale(1.05);
+                filter: blur(5px) brightness(1.2);
             }
             70% { /* 中间略微过度 */
                 opacity: 1;
                 transform: translateZ(50px) rotateX(-5deg) scale(1.02);
+                filter: blur(2px) brightness(1.1);
             }
             100% {
                 opacity: 1;
                 transform: translateZ(0) rotateX(0deg) scale(1);
+                filter: blur(0px) brightness(1);
+            }
+        }
+
+        /* 增强的发光脉冲动画 */
+        @keyframes enhancedGlow {
+            0%, 100% { 
+                box-shadow: 0 15px 50px rgba(0,0,0,0.6), 
+                           0 0 30px rgba(163, 0, 255, 0.3),
+                           inset 0 0 30px rgba(0, 242, 255, 0.1);
+            }
+            50% { 
+                box-shadow: 0 25px 80px rgba(0,0,0,0.8), 
+                           0 0 50px rgba(163, 0, 255, 0.6),
+                           0 0 80px rgba(0, 242, 255, 0.4),
+                           inset 0 0 50px rgba(0, 242, 255, 0.2);
             }
         }
 
@@ -169,11 +186,15 @@
             backdrop-filter: blur(15px) saturate(180%);
             -webkit-backdrop-filter: blur(15px) saturate(180%);
             border: 1px solid var(--input-border-color);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.6), 
+                       0 0 30px rgba(163, 0, 255, 0.2),
+                       inset 0 0 30px rgba(0, 242, 255, 0.05);
             display: flex; /* 让内容居中 */
             flex-direction: column;
             justify-content: space-between;
             pointer-events: auto; /* 确保内部内容能捕获鼠标事件 */
+            animation: enhancedGlow 4s ease-in-out infinite;
+            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         /* 注册卡片初始翻转180度，使其在背面 */
@@ -203,8 +224,17 @@
         .login-container:hover .login-card::before,
         .login-container:hover .register-card::before {
             opacity: 1;
-            filter: blur(6px) brightness(1.2);
-            transform: scale(1.01);
+            filter: blur(8px) brightness(1.5);
+            transform: scale(1.02);
+        }
+
+        .login-container:hover .login-card,
+        .login-container:hover .register-card {
+            box-shadow: 0 25px 80px rgba(0,0,0,0.8), 
+                       0 0 60px rgba(163, 0, 255, 0.4),
+                       0 0 100px rgba(0, 242, 255, 0.3),
+                       inset 0 0 50px rgba(0, 242, 255, 0.1);
+            transform: translateY(-5px) scale(1.01);
         }
 
         /* ------------------- 标题 ------------------- */
@@ -315,8 +345,12 @@
         .action-btn:hover {
             color: #fff;
             border-color: transparent;
-            box-shadow: 0 0 25px var(--glow-primary), 0 0 50px var(--glow-secondary);
-            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 0 40px var(--glow-primary), 
+                       0 0 80px var(--glow-secondary),
+                       0 15px 40px rgba(163, 0, 255, 0.3),
+                       inset 0 0 30px rgba(0, 242, 255, 0.2);
+            transform: translateY(-5px) scale(1.02);
+            background: linear-gradient(135deg, rgba(163, 0, 255, 0.1), rgba(0, 242, 255, 0.1));
         }
         
         .action-btn:hover::before {
@@ -396,7 +430,8 @@
     </style>
 </head>
 <body>
-    <div class="nebula-bg" id="nebula"></div>
+    <div class="neural-bg"></div>
+    <canvas class="neural-canvas" id="neuralCanvas"></canvas>
     <div class="login-container" id="loginContainer">
         <div class="flip-card-inner">
             <div class="login-card" id="loginCard">
@@ -459,7 +494,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('loginContainer');
             const flipCardInner = document.querySelector('.flip-card-inner');
-            const nebula = document.getElementById('nebula');
+            const neuralCanvas = document.getElementById('neuralCanvas');
             
             const loginBtn = document.getElementById('loginBtn');
             const loginForm = document.getElementById('loginForm');
@@ -473,13 +508,222 @@
             const maxTilt = 8; 
             const maxNebulaShift = 30; 
 
-            // 页面加载动画完成后，设置背景和卡片的初始状态
-            setTimeout(() => {
-                nebula.style.opacity = 1;
-                nebula.style.transform = 'scale(1)';
-            }, 50);
+            // ================= Neural Network Background Implementation =================
+            class NeuralNetwork {
+                constructor(canvas) {
+                    this.canvas = canvas;
+                    this.ctx = canvas.getContext('2d');
+                    this.particles = [];
+                    this.connections = [];
+                    this.mouse = { x: 0, y: 0 };
+                    this.animationId = null;
+                    
+                    this.config = {
+                        particleCount: 100,
+                        maxDistance: 120,
+                        mouseRadius: 150,
+                        particleSpeed: 0.5,
+                        connectionOpacity: 0.6,
+                        particleSize: { min: 1, max: 3 },
+                        colors: {
+                            primary: '#a300ff',
+                            secondary: '#00f2ff',
+                            accent: '#ffffff'
+                        }
+                    };
+                    
+                    this.init();
+                }
+                
+                init() {
+                    this.resizeCanvas();
+                    this.createParticles();
+                    this.bindEvents();
+                    this.animate();
+                    
+                    // 激活canvas显示
+                    setTimeout(() => {
+                        this.canvas.classList.add('active');
+                    }, 300);
+                }
+                
+                resizeCanvas() {
+                    this.canvas.width = window.innerWidth;
+                    this.canvas.height = window.innerHeight;
+                }
+                
+                createParticles() {
+                    this.particles = [];
+                    for (let i = 0; i < this.config.particleCount; i++) {
+                        this.particles.push({
+                            x: Math.random() * this.canvas.width,
+                            y: Math.random() * this.canvas.height,
+                            vx: (Math.random() - 0.5) * this.config.particleSpeed,
+                            vy: (Math.random() - 0.5) * this.config.particleSpeed,
+                            radius: Math.random() * (this.config.particleSize.max - this.config.particleSize.min) + this.config.particleSize.min,
+                            opacity: Math.random() * 0.8 + 0.2,
+                            pulsePhase: Math.random() * Math.PI * 2,
+                            connections: []
+                        });
+                    }
+                }
+                
+                updateParticles() {
+                    this.particles.forEach((particle, i) => {
+                        // 更新位置
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+                        
+                        // 边界反弹
+                        if (particle.x < 0 || particle.x > this.canvas.width) {
+                            particle.vx *= -1;
+                        }
+                        if (particle.y < 0 || particle.y > this.canvas.height) {
+                            particle.vy *= -1;
+                        }
+                        
+                        // 鼠标吸引效果
+                        const dx = this.mouse.x - particle.x;
+                        const dy = this.mouse.y - particle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < this.config.mouseRadius) {
+                            const force = (this.config.mouseRadius - distance) / this.config.mouseRadius;
+                            particle.vx += dx * force * 0.01;
+                            particle.vy += dy * force * 0.01;
+                        }
+                        
+                        // 脉冲效果
+                        particle.pulsePhase += 0.02;
+                        particle.currentRadius = particle.radius * (1 + Math.sin(particle.pulsePhase) * 0.3);
+                        
+                        // 限制速度
+                        const maxSpeed = 2;
+                        const speed = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy);
+                        if (speed > maxSpeed) {
+                            particle.vx = (particle.vx / speed) * maxSpeed;
+                            particle.vy = (particle.vy / speed) * maxSpeed;
+                        }
+                    });
+                }
+                
+                drawParticles() {
+                    this.particles.forEach(particle => {
+                        this.ctx.save();
+                        
+                        // 创建径向渐变
+                        const gradient = this.ctx.createRadialGradient(
+                            particle.x, particle.y, 0,
+                            particle.x, particle.y, particle.currentRadius * 3
+                        );
+                        gradient.addColorStop(0, `${this.config.colors.secondary}${Math.floor(particle.opacity * 255).toString(16).padStart(2, '0')}`);
+                        gradient.addColorStop(0.5, `${this.config.colors.primary}${Math.floor(particle.opacity * 128).toString(16).padStart(2, '0')}`);
+                        gradient.addColorStop(1, 'transparent');
+                        
+                        this.ctx.fillStyle = gradient;
+                        this.ctx.beginPath();
+                        this.ctx.arc(particle.x, particle.y, particle.currentRadius * 3, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        
+                        // 绘制核心粒子
+                        this.ctx.fillStyle = `${this.config.colors.accent}${Math.floor(particle.opacity * 255).toString(16).padStart(2, '0')}`;
+                        this.ctx.beginPath();
+                        this.ctx.arc(particle.x, particle.y, particle.currentRadius, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        
+                        this.ctx.restore();
+                    });
+                }
+                
+                drawConnections() {
+                    this.particles.forEach((particleA, i) => {
+                        for (let j = i + 1; j < this.particles.length; j++) {
+                            const particleB = this.particles[j];
+                            const dx = particleA.x - particleB.x;
+                            const dy = particleA.y - particleB.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            
+                            if (distance < this.config.maxDistance) {
+                                const opacity = (1 - distance / this.config.maxDistance) * this.config.connectionOpacity;
+                                
+                                // 创建渐变连接线
+                                const gradient = this.ctx.createLinearGradient(
+                                    particleA.x, particleA.y,
+                                    particleB.x, particleB.y
+                                );
+                                gradient.addColorStop(0, `${this.config.colors.secondary}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`);
+                                gradient.addColorStop(0.5, `${this.config.colors.primary}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`);
+                                gradient.addColorStop(1, `${this.config.colors.secondary}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`);
+                                
+                                this.ctx.strokeStyle = gradient;
+                                this.ctx.lineWidth = 1;
+                                this.ctx.beginPath();
+                                this.ctx.moveTo(particleA.x, particleA.y);
+                                this.ctx.lineTo(particleB.x, particleB.y);
+                                this.ctx.stroke();
+                                
+                        // 绘制流动光点 (性能优化：降低频率)
+                        if (Math.random() < 0.005) {
+                            const t = Math.random();
+                            const flowX = particleA.x + (particleB.x - particleA.x) * t;
+                            const flowY = particleA.y + (particleB.y - particleA.y) * t;
+                            
+                            const flowGradient = this.ctx.createRadialGradient(flowX, flowY, 0, flowX, flowY, 8);
+                            flowGradient.addColorStop(0, this.config.colors.accent);
+                            flowGradient.addColorStop(1, 'transparent');
+                            
+                            this.ctx.fillStyle = flowGradient;
+                            this.ctx.beginPath();
+                            this.ctx.arc(flowX, flowY, 4, 0, Math.PI * 2);
+                            this.ctx.fill();
+                        }
+                            }
+                        }
+                    });
+                }
+                
+                animate() {
+                    // 性能优化：降低帧率到30fps以提升性能
+                    if (this.lastTime === undefined) this.lastTime = performance.now();
+                    const now = performance.now();
+                    const elapsed = now - this.lastTime;
+                    
+                    if (elapsed > 33) { // 约30fps
+                        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                        
+                        this.updateParticles();
+                        this.drawConnections();
+                        this.drawParticles();
+                        
+                        this.lastTime = now;
+                    }
+                    
+                    this.animationId = requestAnimationFrame(() => this.animate());
+                }
+                
+                bindEvents() {
+                    window.addEventListener('resize', () => {
+                        this.resizeCanvas();
+                        this.createParticles();
+                    });
+                    
+                    window.addEventListener('mousemove', (e) => {
+                        this.mouse.x = e.clientX;
+                        this.mouse.y = e.clientY;
+                    });
+                }
+                
+                destroy() {
+                    if (this.animationId) {
+                        cancelAnimationFrame(this.animationId);
+                    }
+                }
+            }
+            
+            // 初始化Neural Network背景
+            const neuralNetwork = new NeuralNetwork(neuralCanvas);
 
-            // 鼠标移动事件 (视差倾斜和背景联动)
+            // 鼠标移动事件 (3D倾斜效果)
             let isFlipping = false; // 新增一个标志来控制翻转状态
 
             container.addEventListener('mousemove', (e) => {
@@ -498,23 +742,15 @@
                 const rotateY = xNorm * maxTilt;
                 const rotateX = -yNorm * maxTilt;
 
-            flipCardInner.style.setProperty('--tiltX', `${rotateX}deg`);
-flipCardInner.style.setProperty('--tiltY', `${rotateY}deg`);
-                
-                // 背景视差效果
-                nebula.style.transform = `
-                    translateX(${-xNorm * maxNebulaShift}px) 
-                    translateY(${-yNorm * maxNebulaShift}px) 
-                    scale(1.05)
-                `;
+                flipCardInner.style.setProperty('--tiltX', `${rotateX}deg`);
+                flipCardInner.style.setProperty('--tiltY', `${rotateY}deg`);
             });
 
             container.addEventListener('mouseleave', () => {
                 if (isFlipping) return; // 如果正在翻转，则不执行归位效果
 
-               flipCardInner.style.setProperty('--tiltX', '0deg');
-flipCardInner.style.setProperty('--tiltY', '0deg');
-                nebula.style.transform = 'translateX(0) translateY(0) scale(1)';
+                flipCardInner.style.setProperty('--tiltX', '0deg');
+                flipCardInner.style.setProperty('--tiltY', '0deg');
             });
 
             // 登录按钮点击动画 (模拟)
